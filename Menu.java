@@ -1,71 +1,68 @@
 package com.example.q;
 
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 
-
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-
 
 public class Menu extends AppCompatActivity implements View.OnClickListener {
-    ImageButton btMNUContatos, btMNUAgendamento, btMNUMeusDados;
-    String email, senha;
+
+    // Declaração dos botões do menu
+    private ImageButton btMNUContatos, btMNUAgendamento, btMNUMeusDados;
+    private String email, senha;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_menu);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.menu), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
 
+        // Inicializando os botões
+        btMNUContatos = findViewById(R.id.btMNUContatos);
+        btMNUAgendamento = findViewById(R.id.btMNUAgendamento);
+        btMNUMeusDados = findViewById(R.id.btMNUMeusDados);
 
-        btMNUContatos = (ImageButton) findViewById(R.id.btMNUContatos);
-        btMNUAgendamento = (ImageButton) findViewById(R.id.btMNUAgendamento);
-        btMNUMeusDados = (ImageButton) findViewById(R.id.btMNUMeusDados);
-
-
+        // Adicionando os listeners de clique
         btMNUContatos.setOnClickListener(this);
         btMNUAgendamento.setOnClickListener(this);
         btMNUMeusDados.setOnClickListener(this);
 
-
+        // Recebendo os parâmetros enviados pela intent
         Intent intencao = getIntent();
-        Bundle parametros = intencao.getExtras();
-        email = parametros.getString("email");
-        senha = parametros.getString("senha");
+        if (intencao != null && intencao.getExtras() != null) {
+            email = intencao.getStringExtra("email");
+            senha = intencao.getStringExtra("senha");
+        }
     }
-
 
     @Override
     public void onClick(View v) {
-        if (v.getId()==R.id.btMNUContatos) {
-            // ir para a tela de contatos (activity_main)
-            Intent telaContatos = new Intent(this, MainActivity.class);
-            startActivity(telaContatos);
-        }
-        if (v.getId()==R.id.btMNUMeusDados) {
-            // ir para a tela de meus dados
-            //Intent telaMeusDados = new Intent(this, MeusDados.class);
-            //startActivity(telaMeusDados);
-        }
-        if (v.getId()==R.id.btMNUAgendamento) {
-            // ir para a tela de Agendamentos
-            Intent telaAgendamento = new Intent(this, AgendamentoAtendimento.class);
-            Bundle parametros = new Bundle();
-            parametros.putString("email",email);
-            parametros.putString("senha",senha);
-            telaAgendamento.putExtras(parametros);
-            startActivity(telaAgendamento);
+        switch (v.getId()) {
+            case R.id.btMNUContatos:
+                // Ir para a tela de contatos
+                Intent telaContatos = new Intent(this, MainActivity.class);
+                startActivity(telaContatos);
+                break;
+
+            case R.id.btMNUAgendamento:
+                // Ir para a tela de Agendamentos
+                Intent telaAgendamento = new Intent(this, AgendamentoAtendimento.class);
+                Bundle parametros = new Bundle();
+                parametros.putString("email", email);
+                parametros.putString("senha", senha);
+                telaAgendamento.putExtras(parametros);
+                startActivity(telaAgendamento);
+                break;
+
+            case R.id.btMNUMeusDados:
+                // Ir para a tela de Meus Dados (Descomentado se implementado)
+                // Intent telaMeusDados = new Intent(this, MeusDados.class);
+                // startActivity(telaMeusDados);
+                break;
+
+            default:
+                break;
         }
     }
 }
